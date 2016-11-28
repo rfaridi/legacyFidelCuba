@@ -13,6 +13,7 @@ require(WDI)
 require(countrycode)
 require(dplyr)
 require(googleVis)
+op <- options(gvis.plot.tag='chart')
 ```
 
 There has been lots of dicussion and debate on social and electronic media on the legacy of Fidel Castro. Particularly discussion was on Cuba's exemplary achievement in health sector. I thought it would be a good opportunity to dig into data and trace Fidel's legacy. 
@@ -26,7 +27,8 @@ Therefore, we can say that the country which Castro received from his predecesso
 In the following, figure on the bottom right in Trails panel, select Cuba so that Cuba's run in the last 55 years is explicityly traced.
 
 
-```{r}
+```{r,results='asis',tidy=FALSE}
+load("./RDATA/latin.RData")
 LE_MR<- gvisMotionChart(latin,
                       idvar="country", timevar="year",
                       xvar="life_expectancy",yvar="Mortality_Rate",
@@ -43,7 +45,7 @@ This fact that Cuba has been one of the top countries throughout its last 50 yea
 
 
 
-```{r}
+```{r,results='asis',tidy=FALSE}
 LE<- gvisMotionChart(latin,
                       idvar="country", timevar="year",
                       xvar="index",yvar="Mortality_Rate",
@@ -60,7 +62,7 @@ In the above, we find that in terms of life expectancy Cuba was one of the top c
 
 
 
-```{r}
+```{r,results='asis',tidy=FALSE}
 MR<- gvisMotionChart(latin,
                       idvar="country", timevar="year",
                       xvar="index",yvar="Mortality_Rate",
@@ -75,16 +77,16 @@ plot(MR)
 
 Another argument that has been regularly put forward is that Castro has made Cuba impoverished. Let's put this into our data grinding machine and check what comes out. 
 
-```{r}
-LE<- gvisMotionChart(latin,
+```{r,results='asis',tidy=FALSE}
+pcgdp<- gvisMotionChart(latin,
                       idvar="country", timevar="year",
-                      yvar=""GDP_per_capita_Constant_USD"",xvar="index",
+                      yvar="GDP_per_capita_Constant_USD", xvar="population",
                       colorvar="iso2c", sizevar="population",
                       options=list(width=640,
                                    #state=myState,
                                    height=420))
 ## Display the chart in the browser
-plot(LE)
+plot(pcgdp)
 ```
 
 
