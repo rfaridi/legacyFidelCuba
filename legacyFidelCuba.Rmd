@@ -1,0 +1,205 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+First load the required packages
+
+
+```{r}
+require(WDI)
+require(countrycode)
+require(dplyr)
+require(googleVis)
+```
+
+
+let's first read in the data
+
+
+Let's set the indicator names and corresponding variable names.
+
+before setting indicator names and others I should mention a little about how do I find the indicator names. For example I was looking for gdp per capita in constant dollars. so i first employed the following 
+
+```{r}
+WDIsearch("gdp per capita") %>% dim()
+```
+
+Let's have a quick check on the class
+
+```{r}
+WDIsearch("gdp per capita") %>% class()
+```
+
+Actually we could assign the following command
+
+```{r}
+str(WDIsearch("gdp per capita"))
+```
+
+It gives us a little bit more information. We see `WDIsearch()` funciton basically returns a matrix of 2 columns and 13 rows
+
+In that case we could just browse and find the corresponding indicator name. but in case there is large number of resutls, we could autmate the process a bit. It may come useful because sometimes it becomes difficult to find the corresponding names in case the results are quite large. so here we go
+
+first save the search result
+
+```{r}
+wdi_sch <- WDIsearch("gdp per capita")
+```
+
+Find the row index of our intended indicator
+
+```{r}
+grep("GDP per capita (.+) 2000 (.+)",wdi_sch[,2],value =T,ignore.case = T)
+```
+
+in the above we see that we were able to find the right kind of result
+
+so we now save the indicator index
+
+```{r}
+indic <- grep("GDP per capita (.+) 2000",wdi_sch[,2],ignore.case = T)
+```
+
+so i got the row indicator, then i find it from the first column
+
+```{r}
+wdi_sch[indic,1]
+```
+
+
+Now let's set this in the list of indicators 
+
+```{r}
+inds <- c('SP.DYN.TFRT.IN','SP.DYN.LE00.IN', 'SP.POP.TOTL',
+'NY.GDP.PCAP.KD', 'SE.ADT.1524.LT.FE.ZS', 'SH.DYN.MORT')
+indnams <- c("fertility_rate", "life_expectancy", "population",
+"GDP_per_capita", "female_literacy","mortality_rate")
+```
+
+Time to get the country code. question is what are the countries to choose? my reference point was name of the countries in this article 
+
+http://www.forbes.com/sites/timworstall/2016/11/26/fidel-castros-economic-disaster-in-cuba/
+
+We will use countrycode package to get required codes
+
+```{r}
+countries <- countrycode(c("Cuba","Ecuador","Jamaica","Panama"),'country.name','iso2c')
+```
+
+Just have a quick look at the countries
+
+```{r}
+countries
+```
+
+Looks just fine.
+
+
+Now let's get the data
+
+```{r}
+wdi_all <- WDI(country='all', 
+              indicator=inds,
+              start=1960, 
+              end=2016, 
+             extra=TRUE)
+```
+
+
+Now in the following, we will be replacing the column headers with the indicator names. Othewise, the names are the indicators which are difficult to undersand. 
+
+```{r}
+colnum <- match(inds, names(wdi_all))
+names(wdi_all)[colnum] <- indnams
+var_names <- gsub("\\.|\\s","_",names(wdi_all))
+var_names <- sub("15.to.25.yr.female.literacy","female_literacy",var_names)
+names(wdi_all) <- var_names
+```
+
+Time to save the file
+```{r}
+save(wdi_all,file="./RDATA/wdi_all.RData")
+
+```
+
+Now let's have a look at the regions
+
+```{r}
+wdi_all %>% group_by(region) %>%
+  summarise(num=n())
+```
+
+in the above we see a category with NA, let's check that out
+
+```{r}
+wdi_all %>% group_by(income) %>%
+  summarise(num=n())
+```
+
+let's check out what are those NAs
+
+```{r}
+wdi_all %>% 
+  filter(is.na(income)) %>%
+  head()
+```
+
+now let's take care of latin america
+
+```{r}
+ex_vars = c("iso3c","region","capital","longitude","latitude","income","lending")  
+
+in_vars <- c("iso2c", "country","year", "fertility_rate","life_expectancy"            ,"population" , "GDP_per_capita_Constant_USD", "female_literacy", "Mortality_Rate"  ,"iso3c","region")
+
+in_vars_list <- as.list(in_vars)
+
+```
+
+         
+
+```{r}
+latin <- wdi_all %>%
+  filter(region=="Latin America & Caribbean (all income levels)") %>%
+  select_(.dots=in_vars_list)
+
+save(latin,file="./RDATA/latin.RData")
+```
+
+
+# Now time for the motion chart
+
+```{r, results='asis',tidy=FALSE}
+myState <- '{"yZoomedIn":false,"xZoomedDataMax":81.49619512,"yLambda":1,"iconType":"BUBBLE","xLambda":1,"xZoomedDataMin":42.10009756,"yZoomedDataMin":1.47,"nonSelectedAlpha":0.4,"orderedByX":false,"xAxisOption":"4","sizeOption":"5","uniColorForNonSelected":false,"orderedByY":false,"yZoomedDataMax":7.555,"dimensions":{"iconDimensions":["dim0"]},"showTrails":true,"colorOption":"2","time":"2014","duration":{"timeUnit":"Y","multiplier":1},"playDuration":15000,"yAxisOption":"3","iconKeySettings":[{"key":{"dim0":"Cuba"},"trailStart":"1960"}],"xZoomedIn":false}'
+
+myState <- '{"iconKeySettings":[{"key":{"dim0":"Cuba"},"trailStart":"1960"}]}'
+
+M <- gvisMotionChart(latin,
+                      idvar="country", timevar="year",
+                      xvar="life_expectancy", yvar="fertility_rate",
+                      colorvar="iso2c", sizevar="population",
+                      options=list(width=640,
+                                   #state=myState,
+                                   height=420))
+## Display the chart in the browser
+plot(M)
+```
+
+The problem with the above is that when we tried to impose  `state` variable, it isn't working. 
+
+Let me try single variables, just the life expectancy
+
+
+```{r}
+LE_MR<- gvisMotionChart(latin,
+                      idvar="country", timevar="year",
+                      xvar="life_expectancy",yvar = "Mortality_Rate",
+                      colorvar="iso2c", sizevar="population",
+                      options=list(width=640,
+                                   #state=myState,
+                                   height=420))
+## Display the chart in the browser
+plot(LE_MR)
+```
+
