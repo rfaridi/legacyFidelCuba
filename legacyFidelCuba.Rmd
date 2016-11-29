@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE)
 ```
 
 
@@ -21,6 +21,37 @@ There has been lots of dicussion and debate on social and electronic media on th
 This World Bank published WDI indicators data available from 1960, right about the time Fidel got into power ousting Batista government. Therefore, this particular data set synchronizes pretty well with Castro's long run in the stint. 
 
 First, we look into life expectancy data. When we plot life expectancy agains mortality rate, we find that Cuba has the lowest mortality rate (47) compared to other Latin American and Carribean countries. In terms of life expectancy, only Uruguay (68.4)  is higher than Cuba (65.8). 
+
+```{r}
+latin %>%
+  filter(year==1960) %>%
+  select(country,life_expectancy) %>%
+  arrange(desc(life_expectancy)) %>%
+  slice(1:10)
+```
+
+Now how about now?
+
+```{r}
+latin %>%
+  filter(year==2014) %>%
+  select(country,life_expectancy) %>%
+  arrange(desc(life_expectancy)) %>%
+  slice(1:10)
+```
+
+Now let's find the rank of cuba throughtout the time span
+
+```{r}
+le_rank <- latin %>%
+  select(country,year,life_expectancy) %>%
+  group_by(year) %>%
+  mutate(rank=min_rank(desc(life_expectancy))) %>%
+  filter(country=="Cuba")
+
+ggplot(le_rank,aes(x=year,y=rank)) + geom_bar(stat = "identity")
+```
+
 
 Therefore, we can say that the country which Castro received from his predecessor was in pretty good shape in terms health sector. What was impressive about Castro's regime was that he was able to maintain this robust situation in health sector and as a result Cuba is still leading the region in healths sector s  . Therefore good health sector was not Cu  Castro's legacy it was rather Cuba's legacy. 
 
