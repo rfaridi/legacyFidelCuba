@@ -1,16 +1,20 @@
 ---
-title: "Legacy of Fidel Castro"
-output: html_document
+output: 
+  html_document:
+    css: fcb_style.css
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message=FALSE)
+require(knitr)
+opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
 ```
 
 
 ```{r}
 require(WDI)
+require(ggplot2)
 require(countrycode)
+require(xtable)
 require(dplyr)
 require(googleVis)
 op <- options(gvis.plot.tag='chart')
@@ -22,22 +26,31 @@ This World Bank published WDI indicators data available from 1960, right about t
 
 First, we look into life expectancy data. When we plot life expectancy agains mortality rate, we find that Cuba has the lowest mortality rate (47) compared to other Latin American and Carribean countries. In terms of life expectancy, only Uruguay (68.4)  is higher than Cuba (65.8). 
 
-```{r}
+```{r,results='asis'}
+load("./RDATA/latin.RData")
 latin %>%
   filter(year==1960) %>%
   select(country,life_expectancy) %>%
   arrange(desc(life_expectancy)) %>%
-  slice(1:10)
+  slice(1:10) %>%
+  xtable(caption='Table 1: Top countries in 1960') %>% 
+                      print(type = 'html',
+                            include.rownames = F,
+                            caption.placement='top')
 ```
 
 Now how about now?
 
-```{r}
+```{r,results='asis'}
 latin %>%
   filter(year==2014) %>%
   select(country,life_expectancy) %>%
   arrange(desc(life_expectancy)) %>%
-  slice(1:10)
+  slice(1:10) %>%
+  xtable(caption='Table 2: Top countries in 2014') %>% 
+                      print(type = 'html',
+                            include.rownames = F,
+                            caption.placement='top')
 ```
 
 Now let's find the rank of cuba throughtout the time span
@@ -58,66 +71,5 @@ Therefore, we can say that the country which Castro received from his predecesso
 In the following, figure on the bottom right in Trails panel, select Cuba so that Cuba's run in the last 55 years is explicityly traced.
 
 
-```{r,results='asis',tidy=FALSE}
-load("./RDATA/latin.RData")
-LE_MR<- gvisMotionChart(latin,
-                      idvar="country", timevar="year",
-                      xvar="life_expectancy",yvar="Mortality_Rate",
-                      colorvar="iso2c", sizevar="population",
-                      options=list(width=640,
-                                   #state=myState,
-                                   height=420))
-## Display the chart in the browser
-plot(LE_MR)
-```
-
-
-This fact that Cuba has been one of the top countries throughout its last 50 years or so history in health can be better explained in the following diagrams where we look upon those two indicators individually.
-
-
-
-```{r,results='asis',tidy=FALSE}
-LE<- gvisMotionChart(latin,
-                      idvar="country", timevar="year",
-                      xvar="index",yvar="Mortality_Rate",
-                      colorvar="iso2c", sizevar="population",
-                      options=list(width=640,
-                                   #state=myState,
-                                   height=420))
-## Display the chart in the browser
-plot(LE)
-```
-
-In the above, we find that in terms of life expectancy Cuba was one of the top countries and stayed as one of the top countries. 
-
-
-
-
-```{r,results='asis',tidy=FALSE}
-MR<- gvisMotionChart(latin,
-                      idvar="country", timevar="year",
-                      xvar="index",yvar="Mortality_Rate",
-                      colorvar="iso2c", sizevar="population",
-                      options=list(width=640,
-                                   #state=myState,
-                                   height=420))
-## Display the chart in the browser
-plot(MR)
-```
-
-
-Another argument that has been regularly put forward is that Castro has made Cuba impoverished. Let's put this into our data grinding machine and check what comes out. 
-
-```{r,results='asis',tidy=FALSE}
-pcgdp<- gvisMotionChart(latin,
-                      idvar="country", timevar="year",
-                      yvar="GDP_per_capita_Constant_USD", xvar="population",
-                      colorvar="iso2c", sizevar="population",
-                      options=list(width=640,
-                                   #state=myState,
-                                   height=420))
-## Display the chart in the browser
-plot(pcgdp)
-```
 
 
