@@ -175,6 +175,23 @@ save(latin,file="./RDATA/latin.RData")
 ```
 
 
+Now I will download  the south asia and cuba. 
+
+
+```{r}
+sa_cuba <- wdi_all %>%
+  filter(region=="South Asia" | country=="Cuba",
+         year > 1971) %>%
+  select_(.dots=in_vars_list) %>%
+  arrange(iso2c,country,year)
+sa_cuba <- sa_cuba %>%
+  group_by(iso2c) %>%
+  mutate(index=1:n()) %>%
+  ungroup()
+
+save(sa_cuba,file="./RDATA/sa_cuba.RData")
+```
+
 # Now time for the motion chart
 
 ```{r, results='asis',tidy=FALSE}

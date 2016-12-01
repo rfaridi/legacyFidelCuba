@@ -43,13 +43,13 @@ p{
 img + strong {margin-left:100px;}
 
 .stext1 {
-ccolor:#B85C35;
-font-size:30px;
+color:blue;
+font-size:20px;
 }
 
 .stext2 {
-ccolor:#FF0000;
-font-size:40px;
+color:green;
+font-size:20px;
 }
 
 .stext3 {

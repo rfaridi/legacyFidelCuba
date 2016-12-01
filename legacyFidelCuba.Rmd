@@ -27,6 +27,11 @@ This World Bank published WDI indicators data available from 1960, right about t
 
 Let's first have a look at the motion chart relating life expectancy with mortality rate. 
 
+<span class="stext1">To track the progress of Cuba, let's select <strong>Cuba</strong> in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button.</span> 
+
+<span class="stext2">Please be patient, it takes few seconds to load the motion chart </span>
+
+
 ```{r,results='asis',tidy=FALSE}
 load("./RDATA/latin.RData")
 LE_MR<- gvisMotionChart(latin,
@@ -83,7 +88,30 @@ ggplot(le_rank,aes(x=year,y=rank)) + geom_point() + ylim(c(0,10))
 ```
 
 
-Therefore, we can say that the country which Castro received from his predecessor was in pretty good shape in terms health sector. What was impressive about Castro's regime was that he was able to maintain this robust situation in health sector and as a result Cuba is still leading the region in health sector. Therefore good health sector was not Castro's legacy it was rather Cuba's legacy. 
+Now let's try to compare South Asia with Cuba. In South Asia, Sri Lanka leads in terms of health indicator. 
+
+<span class="stext1">Let's select <strong>Cuba</strong> and <strong>Bangaldesh</strong>  in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button.</span> 
+
+
+<span class="stext2">Please be patient, it takes few seconds to load the motion chart </span>
+
+```{r,results='asis'}
+load("./RDATA/sa_cuba.RData")
+LE_MR_sa_cuba<- gvisMotionChart(sa_cuba,
+                      idvar="country", timevar="year",
+                      xvar="life_expectancy",yvar="Mortality_Rate",
+                      colorvar="iso2c", sizevar="population",
+                      options=list(width=640,
+                                   #state=myState,
+                                   height=420))
+## Display the chart in the browser
+plot(LE_MR_sa_cuba)
+```
+
+We find that Cuba is leading the South Asia fair and square but it's great to see once again the run of Bangladesh in catching up with Cuba.
+
+
+Back to Cuba and Castro. We can say that the country which Castro received from his predecessor was in pretty good shape in terms health sector. What was impressive about Castro's regime was that he was able to maintain this robust situation in health sector and as a result Cuba is still leading the region in health sector. Therefore good health sector was not Castro's legacy it was rather Cuba's legacy. 
 
 In the following, figure on the bottom right in Trails panel, select Cuba so that Cuba's run in the last 55 years is explicityly traced.
 
