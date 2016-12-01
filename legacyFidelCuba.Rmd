@@ -1,7 +1,8 @@
 ---
+title: Cuba and Castro's legacy
 output: 
   html_document:
-    css: fcb_style.css
+    css: stylesheets/fcb_style.css
 ---
 
 ```{r setup, include=FALSE}
@@ -24,14 +25,30 @@ There has been lots of dicussion and debate on social and electronic media on th
 
 This World Bank published WDI indicators data available from 1960, right about the time Fidel got into power ousting Batista government. Therefore, this particular data set synchronizes pretty well with Castro's long run in the stint. 
 
+Let's first have a look at the motion chart relating life expectancy with mortality rate. 
+
+```{r,results='asis',tidy=FALSE}
+load("./RDATA/latin.RData")
+LE_MR<- gvisMotionChart(latin,
+                      idvar="country", timevar="year",
+                      xvar="life_expectancy",yvar="Mortality_Rate",
+                      colorvar="iso2c", sizevar="population",
+                      options=list(width=640,
+                                   #state=myState,
+                                   height=420))
+## Display the chart in the browser
+plot(LE_MR)
+```
+
+
 First, we look into life expectancy data. When we plot life expectancy agains mortality rate, we find that Cuba has the lowest mortality rate (47) compared to other Latin American and Carribean countries. In terms of life expectancy, only Uruguay (68.4)  is higher than Cuba (65.8). 
 
 ```{r,results='asis'}
 load("./RDATA/latin.RData")
 latin %>%
   filter(year==1960) %>%
-  select(country,life_expectancy) %>%
   arrange(desc(life_expectancy)) %>%
+  select(Country=country,"Life Expectancy"=life_expectancy) %>%
   slice(1:10) %>%
   xtable(caption='Table 1: Top countries in 1960') %>% 
                       print(type = 'html',
@@ -44,8 +61,8 @@ Now how about now?
 ```{r,results='asis'}
 latin %>%
   filter(year==2014) %>%
-  select(country,life_expectancy) %>%
   arrange(desc(life_expectancy)) %>%
+  select(Country=country,"Life Expectancy"=life_expectancy) %>%
   slice(1:10) %>%
   xtable(caption='Table 2: Top countries in 2014') %>% 
                       print(type = 'html',
@@ -62,11 +79,11 @@ le_rank <- latin %>%
   mutate(rank=min_rank(desc(life_expectancy))) %>%
   filter(country=="Cuba")
 
-ggplot(le_rank,aes(x=year,y=rank)) + geom_bar(stat = "identity")
+ggplot(le_rank,aes(x=year,y=rank)) + geom_point() + ylim(c(0,10))
 ```
 
 
-Therefore, we can say that the country which Castro received from his predecessor was in pretty good shape in terms health sector. What was impressive about Castro's regime was that he was able to maintain this robust situation in health sector and as a result Cuba is still leading the region in healths sector s  . Therefore good health sector was not Cu  Castro's legacy it was rather Cuba's legacy. 
+Therefore, we can say that the country which Castro received from his predecessor was in pretty good shape in terms health sector. What was impressive about Castro's regime was that he was able to maintain this robust situation in health sector and as a result Cuba is still leading the region in health sector. Therefore good health sector was not Castro's legacy it was rather Cuba's legacy. 
 
 In the following, figure on the bottom right in Trails panel, select Cuba so that Cuba's run in the last 55 years is explicityly traced.
 
