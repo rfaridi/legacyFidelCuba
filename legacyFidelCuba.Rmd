@@ -27,7 +27,6 @@ These World Bank published WDI indicators data are available from 1960, right ab
 
 Since we are talking about health sector, let's have a look at the motion chart relating life expectancy with mortality rate, two primary indicators of health situation in a country. 
 
-<span class="stext1">To track the progress of Cuba, let's select <strong>Cuba</strong> in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button on the <strong>bottom left</strong> of the chart.</span> 
 
 <span class="stext2">Please be patient, it takes few seconds to load the motion chart </span>
 
@@ -44,6 +43,9 @@ LE_MR<- gvisMotionChart(latin,
 ## Display the chart in the browser
 plot(LE_MR)
 ```
+
+<span class="stext1">To track the progress of Cuba, let's select <strong>Cuba</strong> in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button on the <strong>bottom left</strong> of the chart.</span> 
+
 
 In the above chart, we find that even in 1963, Cuba had the lowest mortality rate among all the South American countries. In life expectancy, Cuba was only below Uruguay. Cuba kept up this strong initial condition of Castro regime until the end. 
 
@@ -147,9 +149,6 @@ We find that in terms of mortality rate, Cuba's rank through out the Castro regi
 
 Now let's try to compare South Asia with Cuba. In South Asia, Sri Lanka leads in terms of health indicator but Cuba beats Sri Lanka by a large margin. Over the years, South Asia tried its best to catch up but Cuba is still going strong. 
 
-<span class="stext1">Let's select <strong>Cuba</strong> and <strong>Bangaldesh</strong>  in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button.</span> 
-
-
 <span class="stext2">Please be patient, it takes few seconds to load the motion chart </span>
 
 ```{r,results='asis'}
@@ -164,6 +163,8 @@ LE_MR_sa_cuba<- gvisMotionChart(sa_cuba,
 ## Display the chart in the browser
 plot(LE_MR_sa_cuba)
 ```
+
+<span class="stext1">Let's select <strong>Cuba</strong> and <strong>Bangaldesh</strong>  in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button.</span> 
 
 As mentioned above, we find that Cuba is leading the South Asia fair and square but it's great to see the run of Bangladesh in catching up with Cuba beating most of the South Asian countries.
 
