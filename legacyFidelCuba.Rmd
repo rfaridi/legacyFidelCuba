@@ -21,13 +21,13 @@ require(googleVis)
 op <- options(gvis.plot.tag='chart')
 ```
 
-There has been lots of dicussion and debate on social and electronic media on the legacy of Fidel Castro. Particularly discussion was on Cuba's exemplary achievement in health sector. I thought it would be a good opportunity to dig into data and trace Fidel's legacy. 
+There have been lots of dicussion and debate on social media on the legacy of Fidel Castro since his death on November 25, 2016. Major focus  was on Cuba's exemplary achievement in health indicators during Castro's regime.  I thought it would be a good opportunity to dig into data and trace Castro's legacy through some numbers. 
 
-This World Bank published WDI indicators data available from 1960, right about the time Fidel got into power ousting Batista government. Therefore, this particular data set synchronizes pretty well with Castro's long run in the stint. 
+These World Bank published WDI indicators data are available from 1960, right about the time Fidel got into power ousting Batista government. Therefore, this particular data set synchronizes pretty well with Castro's long run in the stint. 
 
-Let's first have a look at the motion chart relating life expectancy with mortality rate. 
+Since we are talking about health sector, let's have a look at the motion chart relating life expectancy with mortality rate, two primary indicators of health situation in a country. 
 
-<span class="stext1">To track the progress of Cuba, let's select <strong>Cuba</strong> in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button.</span> 
+<span class="stext1">To track the progress of Cuba, let's select <strong>Cuba</strong> in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button on the <strong>bottom left</strong> of the chart.</span> 
 
 <span class="stext2">Please be patient, it takes few seconds to load the motion chart </span>
 
@@ -45,8 +45,14 @@ LE_MR<- gvisMotionChart(latin,
 plot(LE_MR)
 ```
 
+In the above chart, we find that even in 1963, Cuba had the lowest mortality rate among all the South American countries. In life expectancy, Cuba was only below Uruguay. Cuba kept up this strong initial condition of Castro regime until the end. 
 
-First, we look into life expectancy data. When we plot life expectancy agains mortality rate, we find that Cuba has the lowest mortality rate (47) compared to other Latin American and Carribean countries. In terms of life expectancy, only Uruguay (68.4)  is higher than Cuba (65.8). 
+
+To have better perspective of above phenomenon, we dig a little deeper into the above two health indicators. Let's start with life expectancy data. 
+
+# Life Expectancy
+
+This was Cuba in 1963:
 
 ```{r,results='asis'}
 load("./RDATA/latin.RData")
@@ -55,13 +61,13 @@ latin %>%
   arrange(desc(life_expectancy)) %>%
   select(Country=country,"Life Expectancy"=life_expectancy) %>%
   slice(1:10) %>%
-  xtable(caption='Table 1: Top countries in 1960') %>% 
+  xtable(caption='Table 1: Top countries in 1960 (Life Expectancy)') %>% 
                       print(type = 'html',
                             include.rownames = F,
                             caption.placement='top')
 ```
 
-Now how about now?
+....and this is in 2014
 
 ```{r,results='asis'}
 latin %>%
@@ -69,13 +75,49 @@ latin %>%
   arrange(desc(life_expectancy)) %>%
   select(Country=country,"Life Expectancy"=life_expectancy) %>%
   slice(1:10) %>%
-  xtable(caption='Table 2: Top countries in 2014') %>% 
+  xtable(caption='Table 2: Top countries in 2014 (Life Expectancy)') %>% 
+                      print(type = 'html',
+                            include.rownames = F,
+                            caption.placement='top')
+```
+# Mortality Rate
+
+This was Cuba in 1963:
+
+```{r,results='asis'}
+load("./RDATA/latin.RData")
+latin %>%
+  filter(year==1963) %>%
+  arrange(Mortality_Rate) %>%
+  select(Country=country,"Mortality Rate"=Mortality_Rate) %>%
+  slice(1:10) %>%
+  xtable(caption='Table 3: Top countries in 1963 (Mortality Rate)') %>% 
                       print(type = 'html',
                             include.rownames = F,
                             caption.placement='top')
 ```
 
-Now let's find the rank of cuba throughtout the time span
+....and this is in 2014
+
+```{r,results='asis'}
+latin %>%
+  filter(year==2014) %>%
+  arrange(Mortality_Rate) %>%
+  select(Country=country,"Mortality Rate"=Mortality_Rate) %>%
+  slice(1:10) %>%
+  xtable(caption='Table 4: Top countries in 2014 (Mortality Rate)') %>% 
+                      print(type = 'html',
+                            include.rownames = F,
+                            caption.placement='top')
+```
+
+
+
+The above  tables reconfirm our findings on the dominance of Cuba as we have observed in  the motion chart at the very beginning. 
+
+In the we have observed the beginning and the end but its also worth  checking Castro's regime in the middle. 
+
+Now let's find the rank of Cuba in terms of life expectancy throughtout the whole regime of Castro.
 
 ```{r}
 le_rank <- latin %>%
@@ -87,8 +129,23 @@ le_rank <- latin %>%
 ggplot(le_rank,aes(x=year,y=rank)) + geom_point() + ylim(c(0,10))
 ```
 
+We find that in terms of <strong> life expectancy </strong>, Cuba never have fallen below the rank of 6 among the 41 countries in this region in last 55 years. 
 
-Now let's try to compare South Asia with Cuba. In South Asia, Sri Lanka leads in terms of health indicator. 
+```{r}
+mr_rank <- latin %>%
+  select(country,year,Mortality_Rate) %>%
+  group_by(year) %>%
+  mutate(rank=min_rank(Mortality_Rate)) %>%
+  filter(country=="Cuba")
+
+ggplot(mr_rank,aes(x=year,y=rank)) + geom_point() + ylim(c(0,10))
+```
+
+We find that in terms of mortality rate, Cuba's rank through out the Castro regime  was even more impressive as it was in case of life exectancy. 
+
+# South Asia and Cuba
+
+Now let's try to compare South Asia with Cuba. In South Asia, Sri Lanka leads in terms of health indicator but Cuba beats Sri Lanka by a large margin. Over the years, South Asia tried its best to catch up but Cuba is still going strong. 
 
 <span class="stext1">Let's select <strong>Cuba</strong> and <strong>Bangaldesh</strong>  in <strong>Trails</strong> panel on the <strong>bottom right </strong> of the chart. Then hit the <strong>PLAY</strong> button.</span> 
 
@@ -108,12 +165,12 @@ LE_MR_sa_cuba<- gvisMotionChart(sa_cuba,
 plot(LE_MR_sa_cuba)
 ```
 
-We find that Cuba is leading the South Asia fair and square but it's great to see once again the run of Bangladesh in catching up with Cuba.
+As mentioned above, we find that Cuba is leading the South Asia fair and square but it's great to see the run of Bangladesh in catching up with Cuba beating most of the South Asian countries.
 
 
-Back to Cuba and Castro. We can say that the country which Castro received from his predecessor was in pretty good shape in terms health sector. What was impressive about Castro's regime was that he was able to maintain this robust situation in health sector and as a result Cuba is still leading the region in health sector. Therefore good health sector was not Castro's legacy it was rather Cuba's legacy. 
+Back to Cuba and Castro. We can say that the country which Castro rules was in pretty good shape in  health indicators from the outset. Impressive aspect about Castro's regime was that he was able to maintain this robust achievement which enables Cuba to lead the region in health indicators. 
 
-In the following, figure on the bottom right in Trails panel, select Cuba so that Cuba's run in the last 55 years is explicityly traced.
+
 
 
 

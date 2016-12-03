@@ -1,6 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Ubuntu:400,700,300,300italic,400italic,500,500italic,700italic);
+/*@import url(https://fonts.googleapis.com/css?family=Ubuntu:400,700,300,300italic,400italic,500,500italic,700italic);
 
-/* Whole document: */
+ Whole document: */
 
 body{
   font-family: Georgia,Times;
@@ -48,7 +48,8 @@ font-size:20px;
 }
 
 .stext2 {
-color:green;
+color:red;
+font-weight:bold;
 font-size:20px;
 }
 
