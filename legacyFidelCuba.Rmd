@@ -22,7 +22,7 @@ op <- options(gvis.plot.tag='chart')
 ```
 
 There have been lots of dicussion and debate on social media on the legacy of Fidel Castro since his death on November 25, 2016. Major focus  was on Cuba's exemplary achievement in health indicators during Castro's regime.  I thought it would be a good opportunity to dig into data and trace Castro's legacy through some numbers. 
-
+<img align="left" src="./images/fidel.jpg" style="width:300px;padding:15px 15px 5px 0px;"> 
 These World Bank published WDI indicators data are available from 1960, right about the time Fidel got into power ousting Batista government. Therefore, this particular data set synchronizes pretty well with Castro's long run in the stint. 
 
 Since we are talking about health sector, let's have a look at the motion chart relating life expectancy with mortality rate, two primary indicators of health situation in a country. 
